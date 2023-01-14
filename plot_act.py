@@ -10,8 +10,8 @@ def plot_act(act, x):
     plt.grid(linestyle='--', linewidth=1, alpha=0.5)
     plt.xlabel('Input')
     plt.ylabel('Output')
-    plt.xlim(-6, 6)
-    plt.ylim(-6, 6)
+    plt.xlim(-7, 7)
+    plt.ylim(-7, 7)
     plt.title(act.__class__.__name__)
     plt.show()
 
@@ -37,7 +37,7 @@ def plot_all():
     
     for i, act in enumerate(act_list):
 
-        x = torch.linspace(-6, 6, 100)
+        x = torch.linspace(-7, 7, 100)
         y = act(x).detach().numpy()
 
         row = i // 4
@@ -51,8 +51,8 @@ def plot_all():
         
         axs[row, col].plot(x, y)
         axs[row, col].grid(linestyle='--', linewidth=1, alpha=0.5)
-        axs[row, col].set_xlim(-6, 6)
-        axs[row, col].set_ylim(-6, 6)
+        axs[row, col].set_xlim(-7, 7)
+        axs[row, col].set_ylim(-7, 7)
         axs[row, col].set_title(act.__class__.__name__)
 
     plt.show()
@@ -72,7 +72,7 @@ if __name__ == '__main__':
 
     if act in dir(nn):
         act = getattr(nn, act)()
-        plot_act(act, torch.linspace(-6, 6, 100))
+        plot_act(act, torch.linspace(-7, 7, 100))
     
     elif act == 'all':
 

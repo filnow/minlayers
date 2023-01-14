@@ -1,39 +1,37 @@
-import numpy as np
 import unittest
 import torch
 import nn
-
-
-def helper_function(exp_act, act):
-        # Compare to troch
-        x_torch = torch.randn(3, 3)
-        expected_torch = exp_act(x_torch)
-        np.testing.assert_array_almost_equal(expected_torch, act(x_torch), decimal=5)
+import torch.nn.functional as F
 
 
 class TestActivations(unittest.TestCase):
-    def test_tanh(self):
-        act = nn.Tanh()
+    def test_tanh(self): self.helper_function(nn.Tanh(), torch.tanh)
+        
+    def test_sigmoid(self): self.helper_function(nn.Sigmoid(), torch.sigmoid)
 
-        exp_act = torch.tanh
+    def test_relu(self): self.helper_function(nn.ReLU(), torch.relu)
 
-        helper_function(exp_act, act)
+    def test_leaky_relu(self): self.helper_function(nn.LeakyReLU(), F.leaky_relu)
 
-    def test_sigmoid(self):
-        act = nn.Sigmoid()
+    def test_GELU(self): self.helper_function(nn.GELU(), F.gelu)
 
-        exp_act = torch.sigmoid
+    def test_softmax(self): self.helper_function(nn.Softmax(dim=0), F.softmax)
 
-        helper_function(exp_act, act)
+    def test_relu6(self): self.helper_function(nn.ReLU6(), F.relu6)
 
-    def test_relu(self):
-        act = nn.ReLU()
+    def test_elu(self): self.helper_function(nn.ELU(), F.elu)
 
-        exp_act = torch.relu
+    def test_swish(self): self.helper_function(nn.Swish(), F.silu)
 
-        helper_function(exp_act, act)
+    def test_softplus(self): self.helper_function(nn.Softplus(), F.softplus)
 
+    def test_mish(self): self.helper_function(nn.Mish(), F.mish)
+    
+    @staticmethod
+    def helper_function(act: torch.Tensor, torch_act: torch.Tensor) -> None:
+        x = torch.randn(3, 3)
+        
+        torch.allclose(torch_act(x), act(x), rtol=1e-5, atol=1e-8)
 
 if __name__ == '__main__':
-    np.random.seed(1337)
     unittest.main()

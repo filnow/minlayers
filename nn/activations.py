@@ -64,12 +64,12 @@ class LeakyReLU(Module):
         - in_place (bool): if ``True``, will do this operation in-place. Default: ``False
     
     """ 
-    def __init__(self, negative_slope: float = 0.01, in_place: bool = False) -> None:
+    def __init__(self, negative_slope: float = 0.1, in_place: bool = False) -> None:
         self.negative_slope = negative_slope
         self.in_place = in_place
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        self.out = torch.where(x >= 0, x, self.negative_slope * x)
+        self.out = torch.where(x >= 0, x, torch.mul(x, self.negative_slope))
         
         return self.out
 
@@ -158,12 +158,12 @@ class ELU(Module):
         - See: `Fast and Accurate Deep Network Learning by Exponential Linear Units (ELUs) <https://arxiv.org/abs/1511.07289>`_
 
     """
-    def __init__(self, alpha: float = 0.1, inplace: bool = False) -> None:
+    def __init__(self, alpha: float = 1.0, inplace: bool = False) -> None:
         self.alpha = alpha
         self.inplace = inplace
         
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        self.out = torch.where(x >= 0, x, self.alpha*(torch.exp(x) - 1))
+        self.out = torch.where(x > 0, x, self.alpha*(torch.exp(x) - 1))
 
         return self.out
     
@@ -237,3 +237,24 @@ class Mish(Module):
         
         return self.out
 
+
+class HardShrink(Module):
+    r"""
+
+    HardShrink activation function
+
+    Args:
+        - x (torch.Tensor): input to the activation function
+        - lambd (float): the :math:`\lambda` value for the HardShrink formulation. Default: 0.5
+    
+    Notes:
+        - See: `Exact solutions to the nonlinear dynamics of learning in deep linear neural networks <https://arxiv.org/abs/1312.6120>`_
+
+    """
+    def __init__(self, lambd: float = 0.5) -> None:
+        self.lambd = lambd
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        self.out = torch.where(x < -self.lambd, x, torch.where(x > self.lambd, x, torch.zeros_like(x)))
+
+        return self.out

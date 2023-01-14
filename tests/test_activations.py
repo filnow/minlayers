@@ -26,12 +26,15 @@ class TestActivations(unittest.TestCase):
     def test_softplus(self): self.helper_function(nn.Softplus(), F.softplus)
 
     def test_mish(self): self.helper_function(nn.Mish(), F.mish)
-    
+
+    def test_hardshrink(self): self.helper_function(nn.HardShrink(), F.hardshrink)
+
     @staticmethod
     def helper_function(act: torch.Tensor, torch_act: torch.Tensor) -> None:
-        x = torch.randn(3, 3)
+        x = torch.randn(100, 100)
         
-        torch.allclose(torch_act(x), act(x), rtol=1e-5, atol=1e-8)
+        torch.allclose(torch_act(x), act(x))
 
 if __name__ == '__main__':
+    torch.manual_seed(1337)
     unittest.main()

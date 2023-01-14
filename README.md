@@ -9,5 +9,7 @@ Inspired by [nn-zero-to-hero](https://github.com/karpathy/nn-zero-to-hero)
 # Papers
 
 [Dropout](https://arxiv.org/pdf/1207.0580.pdf) 2012
+
 [BatchNorm](http://arxiv.org/pdf/1502.03167) 2015
+
 [LayerNorm](https://arxiv.org/pdf/1607.06450.pdf) 2016

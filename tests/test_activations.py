@@ -1,46 +1,38 @@
 import numpy as np
 import unittest
 import torch
-from nn.activations import *
+import nn
 
-#TODO: simplify this
+
+def helper_function(exp_act, act):
+        # Compare to troch
+        x_torch = torch.randn(3, 3)
+        expected_torch = exp_act(x_torch)
+        np.testing.assert_array_almost_equal(expected_torch, act(x_torch), decimal=5)
+
 
 class TestActivations(unittest.TestCase):
     def test_tanh(self):
-        activation = Tanh()
-        x = np.random.randn(3, 3)
-        expected = np.tanh(x)
-        np.testing.assert_array_almost_equal(expected, activation(x), decimal=5)
-        np.testing.assert_array_equal([], activation.parameters())
+        act = nn.Tanh()
 
-        # Compare to troch
-        x_torch = torch.from_numpy(x)
-        expected_torch = torch.tanh(x_torch)
-        np.testing.assert_array_almost_equal(expected_torch.numpy(), activation(x), decimal=5)
+        exp_act = torch.tanh
+
+        helper_function(exp_act, act)
 
     def test_sigmoid(self):
-        activation = Sigmoid()
-        x = np.random.randn(3, 3)
-        expected = (1 + np.exp(-x))**-1
-        np.testing.assert_array_almost_equal(expected, activation(x), decimal=5)
-        np.testing.assert_array_equal([], activation.parameters())
+        act = nn.Sigmoid()
 
-        # Compare to troch
-        x_torch = torch.from_numpy(x)
-        expected_torch = torch.sigmoid(x_torch)
-        np.testing.assert_array_almost_equal(expected_torch.numpy(), activation(x), decimal=5)
-        
+        exp_act = torch.sigmoid
+
+        helper_function(exp_act, act)
+
     def test_relu(self):
-        activation = ReLU()
-        x = np.random.randn(3, 3)
-        expected = np.maximum(0, x)
-        np.testing.assert_array_equal(expected, activation(x))
-        np.testing.assert_array_equal([], activation.parameters())
+        act = nn.ReLU()
 
-        # Compare to troch
-        x_torch = torch.from_numpy(x)
-        expected_torch = torch.relu(x_torch)
-        np.testing.assert_array_equal(expected_torch.numpy(), activation(x))
+        exp_act = torch.relu
+
+        helper_function(exp_act, act)
+
 
 if __name__ == '__main__':
     np.random.seed(1337)

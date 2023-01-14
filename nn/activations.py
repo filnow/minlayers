@@ -1,31 +1,52 @@
-import numpy as np
-from typing import List
+import torch
+from .containers import Module
+
+class Tanh(Module):
+    """
+    Tanh activation function
+
+    Args:
+        x (torch.Tensor): input to the activation function
+    
+    Returns:
+        torch.Tensor: output of the activation function
+
+    """
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        self.out = torch.tanh(x)
+        return self.out
+    
 
 
-class Tanh:     
-  def __call__(self, x) -> None:
-    self.out = np.tanh(x)
-    return self.out
+class Sigmoid(Module):
+    """
+    Sigmoid activation function
+
+    Args:
+        x (torch.Tensor): input to the activation function
+    
+    Returns:
+        torch.Tensor: output of the activation function
+
+    """
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        self.out = (1 + torch.exp(-x))**-1
+        return self.out
+    
   
-  def parameters(self) -> List:
-    return []
 
+class ReLU(Module):
+    """
+    ReLU activation function
 
-class Sigmoid:
-    def __call__(self, x) -> None:
-        self.out = (1 + np.exp(-x))**-1
+    Args:
+        x (torch.Tensor): input to the activation function
+    
+    Returns:
+        torch.Tensor: output of the activation function
+
+    """ 
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        self.out = torch.relu(x)
         return self.out
     
-    def parameters(self) -> List:
-        return []
-
-
-class ReLU: 
-    def __call__(self, x) -> None:
-        self.out = np.maximum(0, x)
-        return self.out
-    
-    def parameters(self) -> List:
-        return []
-
-

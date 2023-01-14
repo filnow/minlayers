@@ -1,9 +1,10 @@
 import torch
+from typing import List
+from .containers import Module
 
-
-class BatchNorm1d:
+class BatchNorm1d(Module):
   
-  def __init__(self, dim, eps=1e-5, momentum=0.1):
+  def __init__(self, dim, eps=1e-5, momentum=0.1) -> None:
     self.eps = eps
     self.momentum = momentum
     self.training = True
@@ -14,7 +15,7 @@ class BatchNorm1d:
     self.running_mean = torch.zeros(dim)
     self.running_var = torch.ones(dim)
   
-  def __call__(self, x):
+  def forward(self, x: torch.Tensor) -> torch.Tensor:
     # calculate the forward pass
     if self.training:
       if x.ndim == 2:
@@ -35,5 +36,5 @@ class BatchNorm1d:
         self.running_var = (1 - self.momentum) * self.running_var + self.momentum * xvar
     return self.out
   
-  def parameters(self):
+  def parameters(self) -> List:
     return [self.gamma, self.beta]

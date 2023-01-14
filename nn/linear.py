@@ -1,18 +1,18 @@
-import numpy as np
+import torch
+from typing import List
+from .containers import Module
 
-class Linear:
+class Linear(Module):
+  def __init__(self, fan_in: int, fan_out: int, bias: bool=True) -> None:
+    self.weight = torch.randn((fan_in, fan_out)) / fan_in**0.5 # note: kaiming init
+    self.bias = torch.zeros(fan_out) if bias else None
   
-  def __init__(self, fan_in, fan_out, bias=True):
-    self.weight = np.random.randn((fan_in, fan_out)) / fan_in**0.5 # note: kaiming init
-    self.bias = np.zeros(fan_out) if bias else None
-  
-  def __call__(self, x):
+  def forward(self, x : torch.Tensor) -> torch.Tensor:
     self.out = x @ self.weight
     if self.bias is not None:
       self.out += self.bias
     return self.out
   
-  def parameters(self):
+  def parameters(self) -> List:
     return [self.weight] + ([] if self.bias is None else [self.bias])
-
 

@@ -7,24 +7,6 @@ Each layer should work with pytorch api.
 Inspired by [nn-zero-to-hero](https://github.com/karpathy/nn-zero-to-hero)
 
 
-# How to use
-
-To plot a activation function
-
-arg:
-
-- help - to see all available functions
-
-- all - to plot all functions
-
-- type name of function
-
-```bash
-
-python3 plot_act.py [arg]
-
-```
-
 # Papers
 
 Activations: [HardShrink](https://arxiv.org/pdf/1312.6120.pdf), [ELU](https://arxiv.org/pdf/1511.07289.pdf), 

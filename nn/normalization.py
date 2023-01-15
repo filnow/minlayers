@@ -1,29 +1,43 @@
 import torch
-from typing import List
+from typing import List, Union, Tuple
 from .containers import Module
 
+
 class BatchNorm1d(Module):
-  
-  def __init__(self, dim, eps=1e-5, momentum=0.1) -> None:
+  r"""
+  Batch normalization layer
+
+  Args:
+    - num_features (int): number of features in the input
+    - eps (float): a value added to the denominator for numerical stability. Default: ``1e-5
+    - momentum (float): the value used for the running_mean and running_var computation. Default: ``0.1
+
+  """
+  def __init__(self, 
+               num_features: Union[int, Tuple[int,int]], 
+               eps: float = 1e-5, 
+               momentum: float = 0.1) -> None:
+
+    self.num_features = num_features
     self.eps = eps
     self.momentum = momentum
-    self.training = True
+    self.training: bool = True
     # parameters (trained with backprop)
-    self.gamma = torch.ones(dim)
-    self.beta = torch.zeros(dim)
+    self.gamma: torch.Tensor = torch.ones(num_features)
+    self.beta: torch.Tensor = torch.zeros(num_features)
     # buffers (trained with a running 'momentum update')
-    self.running_mean = torch.zeros(dim)
-    self.running_var = torch.ones(dim)
+    self.running_mean: torch.Tensor = torch.zeros(num_features)
+    self.running_var: torch.Tensor = torch.ones(num_features)
   
   def forward(self, x: torch.Tensor) -> torch.Tensor:
     # calculate the forward pass
     if self.training:
       if x.ndim == 2:
-        dim = 0
+        self.num_features = 0
       elif x.ndim == 3:
-        dim = (0,1)
-      xmean = x.mean(dim, keepdim=True) # batch mean
-      xvar = x.var(dim, keepdim=True) # batch variance
+        self.num_features = (0,1)
+      xmean = x.mean(self.num_features, keepdim=True) # batch mean
+      xvar = x.var(self.num_features, keepdim=True) # batch variance
     else:
       xmean = self.running_mean
       xvar = self.running_var
@@ -38,3 +52,12 @@ class BatchNorm1d(Module):
   
   def parameters(self) -> List:
     return [self.gamma, self.beta]
+
+
+class LayerNorm(Module):
+  def __init__(self) -> None:
+    pass
+
+  def forward(self, x: torch.Tensor) -> torch.Tensor:
+
+    return x

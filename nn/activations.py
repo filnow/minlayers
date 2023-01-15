@@ -1,5 +1,6 @@
 import torch
 from .containers import Module
+from typing import Optional
 
 
 #TODO : Implement inplace versions of the activation functions
@@ -113,7 +114,7 @@ class Softmax(Module):
         - x (torch.Tensor): input to the activation function
         - dim (int): A dimension along which Softmax will be computed     
     """
-    def __init__(self, dim: int = None) -> None:
+    def __init__(self, dim: Optional[int] = None) -> None:
         self.dim = dim
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:

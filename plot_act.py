@@ -4,6 +4,18 @@ import torch
 import sys
 
 
+"""
+Tiny program to plot activation functions
+
+Usage:
+
+    - python3 plot_act.py [activation function] - plot a single activation function
+    
+    - python3 plot_act.py all - plot all activation functions
+
+    - python3 plot_act.py help - print list of activation functions
+
+"""
 def plot_act(act, x):
 
     plt.plot(x, act(x).detach().numpy())
@@ -60,6 +72,7 @@ def plot_all():
 
 if __name__ == '__main__':
 
+
     if len(sys.argv) < 2:
         print("Usage: python plot_act.py <activation>")
         sys.exit(1)
@@ -67,7 +80,7 @@ if __name__ == '__main__':
     act = sys.argv[1]
     
     if act == 'help':
-        print("Available activations: Tanh, Sigmoid, ReLU, LeakyReLU, GELU, Softmax, ReLU6, ELU, Swish, Softplus, Mish")
+        print("Available activations: Tanh, Sigmoid, ReLU, LeakyReLU, GELU, Softmax, ReLU6, ELU, Swish, Softplus, Mish, all")
         sys.exit(0)
 
     if act in dir(nn):
@@ -75,7 +88,6 @@ if __name__ == '__main__':
         plot_act(act, torch.linspace(-7, 7, 100))
     
     elif act == 'all':
-
         plot_all()
 
     else:

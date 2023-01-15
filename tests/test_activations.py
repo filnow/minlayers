@@ -15,7 +15,7 @@ class TestActivations(unittest.TestCase):
 
     def test_GELU(self): self.helper_function(nn.GELU(), F.gelu)
 
-    def test_softmax(self): self.helper_function(nn.Softmax(dim=0), F.softmax)
+    def test_softmax(self): self.helper_function(nn.Softmax(dim=1), F.softmax)
 
     def test_relu6(self): self.helper_function(nn.ReLU6(), F.relu6)
 

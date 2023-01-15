@@ -5,7 +5,7 @@ import torch.nn.functional as F
 
 #TODO simplify this test
 
-class TestConv(unittest.TestCase):
+class TestConv2d(unittest.TestCase):
     def test_conv2d(self):
         x = torch.randn(1, 3, 224, 224)
         conv = nn.Conv2d(3, 32, kernel_size=3)

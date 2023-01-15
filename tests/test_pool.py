@@ -4,7 +4,7 @@ import nn
 import torch.nn.functional as F
 
 
-class TestMaxPool(unittest.TestCase):
+class TestMaxPool2d(unittest.TestCase):
     def test_maxpool(self):
         x = torch.randn(1, 3, 224, 224)
         pool = nn.MaxPool2d(kernel_size=3)

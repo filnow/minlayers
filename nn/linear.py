@@ -30,5 +30,7 @@ class Linear(Module):
   def parameters(self) -> List:
     return [self.weight] + ([] if self.bias is None else [self.bias])
 
+  def __repr__(self) -> str:
+    return f"Linear(fan_in={self.weight.shape[0]}, fan_out={self.weight.shape[1]}, bias={self.bias is not None})"
 
 

@@ -78,7 +78,7 @@ class Conv1d(_Conv):
 class Conv2d(_Conv):
     r"""
     2D convolutional layer
-    
+
     """
     def __init__(self, 
                  in_channels: int, 

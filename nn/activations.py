@@ -18,6 +18,9 @@ class Tanh(Module):
         self.out = torch.tanh(x)
         
         return self.out
+
+    def __repr__(self) -> str:
+        return f"Tanh()"
     
 
 class Sigmoid(Module):
@@ -34,6 +37,9 @@ class Sigmoid(Module):
         
         return self.out
     
+    def __repr__(self) -> str:
+        return f"Sigmoid()"
+
 
 class ReLU(Module):
     r""" 
@@ -53,6 +59,9 @@ class ReLU(Module):
         
         return self.out
     
+    def __repr__(self) -> str:
+        return f"ReLU(in_place={self.in_place})"
+
 
 class LeakyReLU(Module):
     r""" 
@@ -73,6 +82,9 @@ class LeakyReLU(Module):
         self.out = torch.where(x >= 0, x, torch.mul(x, self.negative_slope))
         
         return self.out
+
+    def __repr__(self) -> str:
+        return f"LeakyReLU(negative_slope={self.negative_slope}, in_place={self.in_place})"
 
 
 class GELU(Module):
@@ -104,6 +116,9 @@ class GELU(Module):
         
         return self.out
 
+    def __repr__(self) -> str:
+        return f"GELU(approximate={self.approximate})"
+
 
 class Softmax(Module):
     r"""
@@ -121,6 +136,9 @@ class Softmax(Module):
         self.out = torch.softmax(x, dim=self.dim)
         
         return self.out
+
+    def __repr__(self) -> str:
+        return f"Softmax(dim={self.dim})"
 
 
 class ReLU6(Module):
@@ -143,6 +161,9 @@ class ReLU6(Module):
         self.out = torch.clamp(x, min=0, max=6)
         
         return self.out
+
+    def __repr__(self) -> str:
+        return f"ReLU6(in_place={self.in_place})"
 
 
 class ELU(Module):
@@ -168,6 +189,9 @@ class ELU(Module):
 
         return self.out
     
+    def __repr__(self) -> str:
+        return f"ELU(alpha={self.alpha}, inplace={self.inplace})"
+
 
 class Swish(Module):
     r"""
@@ -189,6 +213,9 @@ class Swish(Module):
         self.out = x * torch.sigmoid(x)
         
         return self.out
+
+    def __repr__(self) -> str:
+        return f"Swish(inplace={self.inplace})"
 
 
 class Softplus(Module):
@@ -215,6 +242,9 @@ class Softplus(Module):
 
         return self.out
 
+    def __repr__(self) -> str:
+        return f"Softplus(beta={self.beta}, threshold={self.threshold})"
+
 
 class Mish(Module):
     r"""
@@ -238,6 +268,9 @@ class Mish(Module):
         
         return self.out
 
+    def __repr__(self) -> str:
+        return f"Mish(inplace={self.inplace})"
+
 
 class HardShrink(Module):
     r"""
@@ -259,3 +292,8 @@ class HardShrink(Module):
         self.out = torch.where(x < -self.lambd, x, torch.where(x > self.lambd, x, torch.zeros_like(x)))
 
         return self.out
+
+    def __repr__(self) -> str:
+        return f"HardShrink(lambd={self.lambd})"
+
+        

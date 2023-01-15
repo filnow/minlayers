@@ -45,7 +45,7 @@ class MaxPool1d(_MaxPool):
                                     self.padding, self.dilation, self.ceil_mode)
         
         return self.out
-
+    
 
 class MaxPool2d(_MaxPool):
     r"""
@@ -64,3 +64,4 @@ class MaxPool2d(_MaxPool):
                                     self.padding, self.dilation, self.ceil_mode)
         
         return self.out
+

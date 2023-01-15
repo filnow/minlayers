@@ -53,6 +53,9 @@ class BatchNorm1d(Module):
   def parameters(self) -> List:
     return [self.gamma, self.beta]
 
+  def __repr__(self) -> str:
+    return f"BatchNorm1d(num_features={self.num_features}, eps={self.eps}, momentum={self.momentum})"
+
 
 class LayerNorm(Module):
   def __init__(self) -> None:

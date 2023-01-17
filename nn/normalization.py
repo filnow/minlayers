@@ -4,15 +4,6 @@ from .containers import Module
 
 
 class BatchNorm1d(Module):
-  r"""
-  Batch normalization layer
-
-  Args:
-    - num_features (int): number of features in the input
-    - eps (float): a value added to the denominator for numerical stability. Default: ``1e-5
-    - momentum (float): the value used for the running_mean and running_var computation. Default: ``0.1
-
-  """
   def __init__(self, 
                num_features: Union[int, Tuple[int,int]], 
                eps: float = 1e-5, 
@@ -22,15 +13,12 @@ class BatchNorm1d(Module):
     self.eps = eps
     self.momentum = momentum
     self.training: bool = True
-    # parameters (trained with backprop)
     self.gamma: torch.Tensor = torch.ones(num_features)
     self.beta: torch.Tensor = torch.zeros(num_features)
-    # buffers (trained with a running 'momentum update')
     self.running_mean: torch.Tensor = torch.zeros(num_features)
     self.running_var: torch.Tensor = torch.ones(num_features)
   
   def forward(self, x: torch.Tensor) -> torch.Tensor:
-    # calculate the forward pass
     if self.training:
       if x.ndim == 2:
         self.num_features = 0

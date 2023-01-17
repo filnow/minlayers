@@ -4,7 +4,7 @@ import torch
 import sys
 
 
-"""
+r"""
 Tiny program to plot activation functions
 
 Usage:

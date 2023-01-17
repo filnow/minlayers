@@ -4,17 +4,6 @@ from typing import Tuple, Optional, Union
 
 
 class _MaxPool(Module):
-    r"""
-    Base class for pooling
-
-    Args:
-        - kernel_size (int or tuple): the size of the window to take a max over
-        - stride (int or tuple, optional): the stride of the window. Default value is kernel_size
-        - padding (int or tuple, optional): implicit zero padding to be added on both sides
-        - dilation (int or tuple, optional): a parameter that controls the stride of elements in the window
-        - ceil_mode (bool, optional): when True, will use `ceil` instead of `floor` to compute the output shape
-        
-    """
     def __init__(self, 
                  kernel_size: Union[int, Tuple[int, ...]], 
                  stride:  Optional[Union[int, Tuple[int, ...]]] = None, 
@@ -29,9 +18,6 @@ class _MaxPool(Module):
 
 
 class MaxPool1d(_MaxPool):
-    r"""
-    1D max pooling layer
-    """
     def __init__(self, 
                  kernel_size: Union[int, Tuple[int, ...]], 
                  stride:  Optional[Union[int, Tuple[int, ...]]] = None, 
@@ -48,9 +34,6 @@ class MaxPool1d(_MaxPool):
     
 
 class MaxPool2d(_MaxPool):
-    r"""
-    2D max pooling layer
-    """
     def __init__(self, 
                  kernel_size: Union[int, Tuple[int, ...]], 
                  stride:  Optional[Union[int, Tuple[int, ...]]] = None, 
@@ -65,3 +48,12 @@ class MaxPool2d(_MaxPool):
         
         return self.out
 
+class AdaptiveAvgPool2d(Module):
+    def __init__(self, 
+                 output_size: Union[int, Tuple[int, ...]]) -> None:
+        self.output_size = output_size
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        self.out = torch.nn.functional.adaptive_avg_pool2d(x, self.output_size)
+        
+        return self.out

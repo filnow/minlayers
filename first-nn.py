@@ -42,4 +42,11 @@ model = ImageNet()
 print(class_img(model, '/home/filnow/fun/tinymodels/static/images/Labrador_retriever_06457.jpg'))
 
 
+module = nn.LayerNorm(100)
 
+x = torch.randn(32, 100)
+x = module(x)
+print(x.shape)
+
+print(x[:,0].mean(), x[:,0].std()) # mean and std of the first column
+print(x[0,:].mean(), x[0,:].std()) # mean and std of the first row

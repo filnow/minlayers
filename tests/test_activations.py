@@ -33,7 +33,23 @@ class TestActivations(unittest.TestCase):
     def helper_function(act: torch.Tensor, torch_act: torch.Tensor) -> None:
         x = torch.randn(100, 100)
         
-        torch.allclose(torch_act(x), act(x))
+        torch.testing.assert_close(torch_act(x), act(x))
+
+class TestAttention(unittest.TestCase):
+    def test_multihead_attention_with_mask(self):
+        x = torch.randn(100, 100, 100)
+        mha = nn.MultiheadAttention(100, 10)
+        mask = torch.tril(torch.zeros(100, 100, 100).bool())
+        self.assertEqual(mha(x, mask).shape, (100, 100, 100))
+    
+    def test_with_pyytorch(self):
+        x = torch.randn(100, 100, 100)
+        mask = torch.tril(torch.ones(100, 100))
+
+        torch_attn = torch.nn.MultiheadAttention(100, 10)
+        attn = nn.MultiheadAttention(100, 10)
+    
+        torch.testing.assert_close(torch_attn(x, x, x, mask)[0], attn(x, mask))
 
 if __name__ == '__main__':
     torch.manual_seed(1337)

@@ -4,11 +4,11 @@ from typing import List
 
 class Module:
   
-  def forward(self, x: torch.Tensor) -> torch.Tensor:
+  def forward(self) -> torch.Tensor:
     raise NotImplementedError
   
-  def __call__(self, x: torch.Tensor) -> torch.Tensor:
-      return self.forward(x)
+  def __call__(self, *args) -> torch.Tensor:
+      return self.forward(args[0], *args[1:])
 
   def parameters(self) -> List:
     return []

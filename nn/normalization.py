@@ -46,9 +46,28 @@ class BatchNorm1d(Module):
 
 
 class LayerNorm(Module):
-  def __init__(self) -> None:
-    pass
+  def __init__(self, 
+               num_features: Union[int, Tuple[int,int]], 
+               eps: float = 1e-5) -> None:
+
+    self.eps = eps
+    self.gamma: torch.Tensor = torch.ones(num_features)
+    self.beta: torch.Tensor = torch.zeros(num_features)
 
   def forward(self, x: torch.Tensor) -> torch.Tensor:
+    #NOTE this is different from BatchNorm1d beacuse we are normalizing over the rows not the columns  
+    self.num_features = 1 if x.ndim == 2 else (1,2)
+    
+    xmean = x.mean(self.num_features, keepdim=True) 
+    xvar = x.var(self.num_features, keepdim=True) 
+    
+    xhat = (x - xmean) / torch.sqrt(xvar + self.eps) 
+    self.out = self.gamma * xhat + self.beta
 
-    return x
+    return self.out
+  
+  def parameters(self) -> List:
+    return [self.gamma, self.beta]
+
+  def __repr__(self) -> str:
+    return f"LayerNorm(num_features={self.num_features}, eps={self.eps}, momentum={self.momentum})"

@@ -35,12 +35,14 @@ class TestActivations(unittest.TestCase):
         
         torch.testing.assert_close(torch_act(x), act(x))
 
+#TODO find out why this test fails
+
 class TestAttention(unittest.TestCase):
     def test_multihead_attention_with_mask(self):
         x = torch.randn(100, 100, 100)
         mha = nn.MultiheadAttention(100, 10)
         mask = torch.tril(torch.zeros(100, 100, 100).bool())
-        self.assertEqual(mha(x, mask).shape, (100, 100, 100))
+        self.assertEqual(mha(x, x, x, mask).shape, (100, 100, 100))
     
     def test_with_pyytorch(self):
         x = torch.randn(100, 100, 100)
@@ -49,7 +51,7 @@ class TestAttention(unittest.TestCase):
         torch_attn = torch.nn.MultiheadAttention(100, 10)
         attn = nn.MultiheadAttention(100, 10)
     
-        torch.testing.assert_close(torch_attn(x, x, x, mask)[0], attn(x, mask))
+        torch.testing.assert_close(torch_attn(x, x, x, attn_mask=mask)[0], attn(x, x, x, mask))
 
 if __name__ == '__main__':
     torch.manual_seed(1337)

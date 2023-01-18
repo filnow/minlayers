@@ -6,7 +6,7 @@ from utils import class_img
 class ImageNet(nn.Module):
     def __init__(self) -> None:
         super().__init__()        
-        self.features = nn.Sequential([
+        self.features = nn.Sequential(
             nn.Conv2d(3, 64, kernel_size=7, stride=2, padding=3),
             nn.ReLU(inplace=True),
             nn.MaxPool2d(kernel_size=3, stride=2, padding=1),
@@ -15,15 +15,15 @@ class ImageNet(nn.Module):
             nn.Conv2d(64, 128, kernel_size=3, padding=1),
             nn.ReLU(inplace=True),
             nn.MaxPool2d(kernel_size=3, stride=2, padding=1),
-        ])
+        )
         
-        self.classifier = nn.Sequential([
+        self.classifier = nn.Sequential(
             nn.Dropout(),
             nn.Linear(128 * 6 * 6, 256),
             nn.ReLU(inplace=True),
             nn.Dropout(),
             nn.Linear(256, 10),
-        ])    
+        )    
         
         self.avg = nn.AdaptiveAvgPool2d((6,6))
     

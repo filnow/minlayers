@@ -177,25 +177,28 @@ class Attention(Module):
     def __init__(self, 
                  n_embd: int, 
                  head_size: int,
-                 dropout: float = 0.5) -> None:
+                 dropout: float = 0.0) -> None:
         super().__init__()
         self.key = Linear(n_embd, head_size, bias=False)
         self.query = Linear(n_embd, head_size, bias=False)
         self.value = Linear(n_embd, head_size,  bias=False)
 
-        self.dropout = Dropout(dropout)
+        self.dropout = torch.nn.Dropout(dropout)
 
     def forward(self, 
-                x: torch.Tensor, 
-                attn_mask: torch.Tensor) -> torch.Tensor:
-        B, T, C = x.shape
+                q: torch.Tensor,
+                k: torch.Tensor,
+                v: torch.Tensor, 
+                attn_mask: Optional[torch.Tensor]) -> torch.Tensor:
+        B, T, C = q.shape
         
-        key = self.key(x)
-        query = self.query(x)
-        value = self.value(x)
+        query = self.query(q)
+        key = self.key(k)
+        value = self.value(v)
 
         attn = query @ key.transpose(-2, -1) * C**-0.5
-        attn = attn.masked_fill(attn_mask[:T, :T] == 0, float('-inf'))
+        if attn_mask is not None:
+            attn = attn.masked_fill(attn_mask[:T, :T] == 0, float('-inf'))
         attn = torch.softmax(attn, dim=-1)
         attn = self.dropout(attn)
         attn = attn @ value
@@ -207,7 +210,7 @@ class MultiheadAttention(Module):
     def __init__(self, 
                  embed_dim: int, 
                  num_heads: int,
-                 dropout: int = 0.5) -> None:
+                 dropout: int = 0.0) -> None:
         super().__init__()
         head_size = embed_dim // num_heads
         self.embed_dim = embed_dim
@@ -215,12 +218,14 @@ class MultiheadAttention(Module):
 
         self.heads = [Attention(embed_dim, head_size) for _ in range(num_heads)]
         self.proj = Linear(embed_dim, embed_dim)
-        self.dropout = Dropout(dropout)
+        self.dropout = torch.nn.Dropout(dropout)
 
     def forward(self, 
-                x: torch.Tensor,
-                attn_mask: torch.Tensor) -> torch.Tensor:
-        self.out = torch.cat([head(x, attn_mask) for head in self.heads], dim=-1)
+                q: torch.Tensor,
+                k: torch.Tensor,
+                v: torch.Tensor, 
+                attn_mask: Optional[torch.Tensor]) -> torch.Tensor:
+        self.out = torch.cat([head(q, k, v, attn_mask) for head in self.heads], dim=-1)
         self.out = self.dropout(self.proj(self.out))
 
         return self.out

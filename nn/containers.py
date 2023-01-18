@@ -8,7 +8,7 @@ class Module:
     raise NotImplementedError
   
   def __call__(self, *args) -> torch.Tensor:
-      return self.forward(args[0], *args[1:])
+      return self.forward(*args)
 
   def parameters(self) -> List:
     return []
@@ -19,8 +19,8 @@ class Module:
 
 class Sequential(Module):
   
-  def __init__(self, layers: List) -> None:
-    self.layers = layers
+  def __init__(self, *args) -> None:
+    self.layers = args
   
   def forward(self, x: torch.Tensor) -> torch.Tensor:
     for layer in self.layers:

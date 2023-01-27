@@ -1,7 +1,5 @@
 import nn
 import torch
-from utils import class_img
-
 
 class ImageNet(nn.Module):
     def __init__(self) -> None:
@@ -33,20 +31,14 @@ class ImageNet(nn.Module):
         x = self.avg(x)
         x = torch.flatten(x, 1)
         x = self.classifier(x)
-
-        return x
+        
+        return torch.softmax(x, dim=1)
 
 
 model = ImageNet()
 
-print(class_img(model, '/home/filnow/fun/tinymodels/static/images/Labrador_retriever_06457.jpg'))
+x = torch.randn(1, 3, 224, 224)
+y = model(x)
 
-
-module = nn.LayerNorm(100)
-
-x = torch.randn(32, 100)
-x = module(x)
-print(x.shape)
-
-print(x[:,0].mean(), x[:,0].std()) # mean and std of the first column
-print(x[0,:].mean(), x[0,:].std()) # mean and std of the first row
+print(y)
+print(y.shape)

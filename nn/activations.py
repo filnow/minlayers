@@ -30,6 +30,7 @@ class Sigmoid(Module):
 
 class ReLU(Module):
     def __init__(self, inplace: bool = False) -> None:
+        super().__init__()
         self.inplace = inplace
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
@@ -43,6 +44,7 @@ class ReLU(Module):
 
 class LeakyReLU(Module):
     def __init__(self, negative_slope: float = 0.01, inplace: bool = False) -> None:
+        super().__init__()
         self.negative_slope = negative_slope
         self.inplace = inplace
 
@@ -57,6 +59,7 @@ class LeakyReLU(Module):
 
 class GELU(Module):
     def __init__(self, approximate: str = 'none') -> None:
+        super().__init__()
         self.approximate = approximate
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
@@ -78,6 +81,7 @@ class GELU(Module):
 
 class Softmax(Module):
     def __init__(self, dim: Optional[int] = None) -> None:
+        super().__init__()
         self.dim = dim
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
@@ -91,6 +95,7 @@ class Softmax(Module):
 
 class ReLU6(Module):
     def __init__(self, inplace: bool = False) -> None:
+        super().__init__()
         self.inplace = inplace
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
@@ -104,6 +109,7 @@ class ReLU6(Module):
 
 class ELU(Module):
     def __init__(self, alpha: float = 1.0, inplace: bool = False) -> None:
+        super().__init__()
         self.alpha = alpha
         self.inplace = inplace
         
@@ -118,6 +124,7 @@ class ELU(Module):
 
 class Swish(Module):
     def __init__(self, inplace: bool = False) -> None:
+        super().__init__()
         self.inplace = inplace
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
@@ -131,6 +138,7 @@ class Swish(Module):
 
 class Softplus(Module):
     def __init__(self, beta: int = 1, threshold: int = 20) -> None:
+        super().__init__()
         self.beta = beta
         self.threshold = threshold
 
@@ -148,6 +156,7 @@ class Softplus(Module):
 
 class Mish(Module):
     def __init__(self, inplace: bool = False) -> None:
+        super().__init__()
         self.inplace = inplace
         self.softplus = Softplus()
 
@@ -162,6 +171,7 @@ class Mish(Module):
 
 class HardShrink(Module):
     def __init__(self, lambd: float = 0.5) -> None:
+        super().__init__()
         self.lambd = lambd
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
@@ -189,7 +199,7 @@ class Attention(Module):
                 q: torch.Tensor,
                 k: torch.Tensor,
                 v: torch.Tensor, 
-                attn_mask: Optional[torch.Tensor]) -> torch.Tensor:
+                attn_mask: Optional[torch.Tensor] = None) -> torch.Tensor:
         B, T, C = q.shape
         
         query = self.query(q)
@@ -224,7 +234,7 @@ class MultiheadAttention(Module):
                 q: torch.Tensor,
                 k: torch.Tensor,
                 v: torch.Tensor, 
-                attn_mask: Optional[torch.Tensor]) -> torch.Tensor:
+                attn_mask: Optional[torch.Tensor] = None) -> torch.Tensor:
         self.out = torch.cat([head(q, k, v, attn_mask) for head in self.heads], dim=-1)
         self.out = self.dropout(self.proj(self.out))
 

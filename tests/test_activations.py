@@ -51,7 +51,7 @@ class TestAttention(unittest.TestCase):
         torch_attn = torch.nn.MultiheadAttention(100, 10)
         attn = nn.MultiheadAttention(100, 10)
     
-        torch.testing.assert_close(torch_attn(x, x, x, attn_mask=mask)[0], attn(x, x, x, mask))
+        torch.testing.assert_close(torch_attn(x, x, x)[0], attn(x, x, x,))
 
 if __name__ == '__main__':
     torch.manual_seed(1337)

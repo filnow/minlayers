@@ -27,38 +27,27 @@ class _Conv(Module):
         self.groups = groups
         self.padding_mode = padding_mode
         self.weight: torch.Tensor = torch.randn(out_channels, in_channels // groups, kernel_size, kernel_size)
-        self.bias: Optional[torch.Tensor] = torch.randn(out_channels) if bias else torch.zeros(out_channels)
+        self.bias: torch.Tensor = torch.randn(out_channels) if bias else torch.zeros(out_channels)
     
     def _conv2d(self, x: torch.Tensor) -> torch.Tensor:
-        # get dimensions of x
-        N, C, H, W = x.shape
-        # get dimensions of w
-        FILTR, C, HH, WW = self.weight.shape
+        N, _, H, W = x.shape
 
-        # calculate output dimensions
-        H_out = int(1 + (H + 2 * self.padding - HH) / self.stride)
-        W_out = int(1 + (W + 2 * self.padding - WW) / self.stride)
+        FILTR, _, HH, WW = self.weight.shape
 
-        # initialize output tensor
-        y = torch.zeros((N, FILTR, H_out, W_out))
+        HOUT = int(1 + (H + 2 * self.padding - HH) / self.stride)
+        WOUT = int(1 + (W + 2 * self.padding - WW) / self.stride)
 
-        # pad x
-        #NOTE: this is adding a padding of 0s around the image
-        x_pad: torch.Tensor = F.pad(x, (0,0,self.padding,self.padding), "constant", 0)
+        x_pad = F.pad(x, (0,0,self.padding,self.padding), "constant", 0)
+        out = torch.zeros((N, FILTR, HOUT, WOUT))
 
-        #NOTE: this is looping over each image in the batch
         for n in range(N): 
-            #NOTE: this is looping over each filter
             for f in range(FILTR):  
-                #NOTE: this is looping over each row in the output
-                for i in range(H_out): 
-                    #NOTE: this is looping over each column in the output
-                    for j in range(W_out): 
-                        # get the current window
+                for i in range(HOUT): 
+                    for j in range(WOUT): 
+                        
                         window = x_pad[n, :, i*self.stride:i*self.stride+HH, j*self.stride:j*self.stride+WW]
-                        # compute the dot product between the window and the filter
-                        y[n, f, i, j] = torch.sum(window * self.weight[f]) + self.bias[f]
-        return y
+                        out[n, f, i, j] = torch.sum(window * self.weight[f]) + self.bias[f]
+        return out
 
     def parameters(self) -> List:
         return [self.weight, self.bias] if self.bias else [self.weight]

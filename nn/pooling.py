@@ -1,7 +1,7 @@
 import torch
 from .containers import Module
 from typing import Tuple, Optional, Union
-
+import torch.nn.functional as F
 
 class _MaxPool(Module):
     def __init__(self, 
@@ -54,6 +54,6 @@ class AdaptiveAvgPool2d(Module):
         self.output_size = output_size
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        self.out = torch.nn.functional.adaptive_avg_pool2d(x, self.output_size)
+        self.out = F.adaptive_avg_pool2d(x, self.output_size)
         
         return self.out
